@@ -52,8 +52,8 @@ before_install:
       brew update
       brew cask uninstall oclint
       brew outdated pyenv || brew upgrade pyenv
-      
       eval "$(pyenv init -)"
+      
       case "${TOXENV}" in
         py34)
           PYVER=3.4
