@@ -1,0 +1,144 @@
+# After changing this file, check it on:
+#   http://lint.travis-ci.org/
+language: python
+
+os:
+  - linux
+  - osx
+
+python:
+  - 3.4
+  - 3.5
+  - 3.6
+
+matrix:
+  include:
+    - compiler: gcc
+      env: OBFLAGS="-DBUILD_SHARED=no -DCMAKE_POSITION_INDEPENDENT_CODE=on"
+    - os: osx
+      python: 3.4
+      language: generic
+      env: TOXENV=py34
+    - os: osx
+      python: 3.5
+      language: generic
+      env: TOXENV=py35
+    - os: osx
+      python: 3.6
+      language: generic
+      env: TOXENV=py36
+  allow_failures:
+    - os: osx
+
+env:
+  global:
+    # PYPIPASSWORD=...
+    - secure: "eAreGa6ZBtzasZrZp32Hac3oxO+dmC2noOM+kcJA39yla4sQqdXCF0kot1VWuUXnbQ22khyGa68Rm59+pmlpExdNKikMWwm2j+DiRMJh/BimuwcXSG5Fw0rfSYmyL88QDdklBk0kzeXNdicjoKC8Ka+aiPraQ+OKhyyyKvj4Q6EMRvtd/YFg5R2xVucySHWxdvZX7ryJQIxUUN4me0mcGYZ61/W0ErGrpwk0+FcJA0TYZtyBD4CUvNdXgl0D+Wl0mAsh2bN0forMpr4U9pqoN8AUx4+1YNuQ9njh0fn/9zvQsTSPIwYsiEBbbtefKl+z3ucbTuvj1Kkgxo5ahdEyr5GBLc7gYyh9HMK4bqqSWg3bnkkpfpqM1pLvr3pZWiw1DLSRYKpahUQLwRnXtLaMVN+J4IJeg/1KkxOhbLUi6ahls0sXXLbxRMnWyaPFWiUsS4dU+diiec1csW0mwMSOeXgODaszY+3ZOLUtOdKoGU/CTYmrzYZRaMuB45XVECBMy8QExSP64HGvtVi3LtypK2J/B//fTkKc30WVICrrsBalY0DjgedrSzgAriVOAwsSzxtXYbCPHOrJ4lzJwU4ikAUPJyLCRJ+gb2GLgC+unNfj5etfJGPG95a+AEyFFepFHEJNtnOQTmy7MIGCCHkp+JTo+qe9b/yjCpGoBvO6f2Y="
+
+before_install:
+  - |
+    if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+      sudo apt-get update -qq
+    else
+      brew update
+      brew cask uninstall oclint
+      brew outdated pyenv || brew upgrade pyenv
+      eval "$(pyenv init -)"
+      case "${TOXENV}" in
+        py34)
+          PYVER=3.4
+          # Install the latest release of the specified Python version using pyenv.
+          PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
+          pyenv install $PYVER
+          pyenv global $PYVER
+          echo "Selected Python $PYVER"
+          python --version
+          ;;
+        py35)
+          PYVER=3.5
+          # Install the latest release of the specified Python version using pyenv.
+          PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
+          pyenv install $PYVER
+          pyenv global $PYVER
+          echo "Selected Python $PYVER"
+          python --version
+          ;;
+        py36)
+          PYVER=3.6
+          # Install the latest release of the specified Python version using pyenv.
+          PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
+          pyenv install $PYVER
+          pyenv global $PYVER
+          echo "Selected Python $PYVER"
+          python --version
+          ;;
+      esac
+    fi
+
+before_script:
+  - |
+    # At first instal openbabel
+    mkdir external
+    cd external
+    git clone https://github.com/openbabel/openbabel
+    cd openbabel
+    mkdir build
+    cd build
+    cmake ${OBFLAGS} ..
+    make -j2
+    sudo make install
+    cd ..
+    cd ..
+
+  - |
+    # Install patchelf
+    git clone https://github.com/NixOS/patchelf
+    cd patchelf
+    ./bootstrap.sh
+    ./configure && make && sudo make install
+    cd ..
+    cd ..
+
+
+  - |
+    # Run cmake
+    mkdir build
+    cd build
+    cmake ..
+    make -j2
+    cd ..
+
+install:
+  - |
+    if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+      pip install auditwheel
+    fi
+  - pip install -ve .
+
+script:
+  - python -c 'import pyOBabel'
+
+after_success:
+  # Specify account details for PyPI
+  - |
+    echo "[distutils]"                                  > ~/.pypirc
+    echo "index-servers ="                             >> ~/.pypirc
+    echo "    pypi"                                    >> ~/.pypirc
+    echo "[pypi]"                                      >> ~/.pypirc
+    echo "username=rjdkmr"                             >> ~/.pypirc
+    echo "password=$PYPIPASSWORD"                      >> ~/.pypirc
+
+  # For OS X and tags only, build a Python source distribution and "binary
+  # wheel" and upload these to PyPI. Note that the source upload will only
+  # succeed the first time and will be skipped by twine in subsiquent attempts.
+  - |
+    pip install --upgrade twine
+    if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+      pip wheel --no-deps --no-cache-dir -w wheels .
+      auditwheel show wheels/*.whl
+      auditwheel repair wheels/*.whl
+      twine upload --skip-existing wheelhouse/*
+    else
+      python setup.py bdist_wheel
+    fi
+  # - twine upload --skip-existing dist/*
