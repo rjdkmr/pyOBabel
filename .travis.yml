@@ -1,6 +1,6 @@
 # After changing this file, check it on:
 #   http://lint.travis-ci.org/
-language: python
+language: cpp
 
 os:
   - linux
@@ -13,8 +13,6 @@ python:
 
 matrix:
   include:
-    - compiler: gcc
-      env: OBFLAGS="-DBUILD_SHARED=no -DCMAKE_POSITION_INDEPENDENT_CODE=on"
     - os: osx
       python: 3.4
       language: generic
@@ -75,6 +73,15 @@ before_install:
       esac
     fi
 
+install:
+  - |
+    if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+      pip install auditwheel
+      sudo apt-get install -qq libeigen3-dev
+    else
+      brew install eigen
+    fi
+
 before_script:
   - |
     # At first instal openbabel
@@ -84,7 +91,7 @@ before_script:
     cd openbabel
     mkdir build
     cd build
-    cmake ${OBFLAGS} ..
+    cmake -DBUILD_SHARED=no -DCMAKE_POSITION_INDEPENDENT_CODE=on ..
     make -j2
     sudo make install
     cd ..
@@ -108,14 +115,8 @@ before_script:
     make -j2
     cd ..
 
-install:
-  - |
-    if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-      pip install auditwheel
-    fi
-  - pip install -ve .
-
 script:
+  - pip install -ve .
   - python -c 'import pyOBabel'
 
 after_success:
