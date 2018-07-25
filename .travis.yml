@@ -15,7 +15,6 @@ matrix:
       addons:
         apt:
           sources: [deadsnakes]
-            packages: [python3.4, python3.4-pip, python3.4-dev, python3.4-venv]
     - os: linux
       python: 3.5
       language: generic
@@ -23,7 +22,6 @@ matrix:
       addons:
         apt:
           sources: [deadsnakes]
-            packages: [python3.5, python3.5-pip, python3.5-dev, python3.5-venv]
     - os: linux
       python: 3.6
       language: generic
@@ -31,7 +29,6 @@ matrix:
       addons:
         apt:
           sources: [deadsnakes]
-            packages: [python3.6, python3.6-pip, python3.6-dev, python3.6-venv]
     - os: osx
       python: 3.4
       language: generic
@@ -95,7 +92,6 @@ before_install:
           ;;
       esac
    fi
-
 
 install:
   - |
