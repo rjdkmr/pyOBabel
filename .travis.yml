@@ -19,7 +19,7 @@ matrix:
     - os: linux
       python: 3.6
       language: generic
-      env: TPYTHON=3.6
+      env: PYTHON=3.6
     - os: osx
       python: 3.4
       language: generic
@@ -43,9 +43,7 @@ env:
 before_install:
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-      sudo apt-get update -qq
-      sudo apt-get install zlib1g-dev
-      sudo apt-get remove python3 python3-dev
+      sudo apt-get update
     else
       brew update
       brew cask uninstall oclint
@@ -85,13 +83,14 @@ before_install:
 
       export CC=gcc-5
       export CXX=g++-5
-   fi
+
+    fi
 
 install:
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
       pip install auditwheel
-      sudo apt-get install -qq libeigen3-dev
+      sudo apt-get install libeigen3-dev
     else
       brew install eigen
     fi
@@ -131,7 +130,6 @@ before_script:
 
 script:
   - pip install -ve .
-  - ldd pyOBabel/*.so
   - python -c 'import pyOBabel'
 
 after_success:
@@ -157,4 +155,5 @@ after_success:
     else
       python setup.py bdist_wheel
     fi
-  # - twine upload --skip-existing dist/*
+  
+# - twine upload --skip-existing dist/*
