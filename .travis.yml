@@ -46,8 +46,6 @@ before_install:
       sudo apt-get update -qq
       sudo apt-get install zlib1g-dev
       sudo apt-get remove python3 python3-dev
-      sudo apt-get install python${PYTHON} python${PYTHON}-pip python${PYTHON}-dev python${PYTHON}-venv
-      pyenv global python${PYTHON}
     else
       brew update
       brew cask uninstall oclint
@@ -77,6 +75,7 @@ before_install:
           PYVER=3.6
           # Install the latest release of the specified Python version using pyenv.
           PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
+          pyenv install $PYVER
           pyenv global $PYVER
           echo "Selected Python $PYVER"
           python --version
