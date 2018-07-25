@@ -58,7 +58,7 @@ before_install:
       sudo apt-get update
       sudo apt-get remove python3 python3-dev
       sudo apt-get install python${PYTHON} python${PYTHON}-dev python${PYTHON}-venv
-      pyenv global `python3 --version`
+      pyenv global $(python3 --version)
     else
       brew update
       brew cask uninstall oclint
@@ -104,7 +104,7 @@ before_install:
 install:
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-      pip install auditwheel
+      python -m pip install auditwheel
       sudo apt-get install libeigen3-dev
     else
       brew install eigen
@@ -137,14 +137,15 @@ before_script:
 
   - |
     # Run cmake
+    PY_CMD=$(python -c "import sys; print(sys.executable)")
     mkdir build
     cd build
-    cmake ..
+    cmake -DPYTHON_EXECUTABLE:FILEPATH=$PY_CMD ..
     make -j2
     cd ..
 
 script:
-  - pip install -ve .
+  - python -m pip install -ve .
   - python -c 'import pyOBabel'
 
 after_success:
