@@ -129,6 +129,7 @@ before_script:
 
 script:
   - pip install -ve .
+  - ldd pyOBabel/*.so
   - python -c 'import pyOBabel'
 
 after_success:
