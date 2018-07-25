@@ -9,23 +9,14 @@ os:
 matrix:
   include:
     - os: linux
-      env: PYTHON=3.4 CPP=11 GCC=4.8
-      addons:
-        apt:
-          sources: [deadsnakes]
-          packages: [python3.4-dev python3.4-venv, cmake=2.\*, cmake-data=2.\*]
+      python: 3.4
+      env: PYTHON=3.4
     - os: linux
-      env: PYTHON=3.5 CPP=11 GCC=4.8
-      addons:
-        apt:
-          sources: [deadsnakes]
-          packages: [python3.5-dev python3.5-venv, cmake=2.\*, cmake-data=2.\*]
+      python: 3.5
+      env: PYTHON=3.5
     - os: linux
-      env: PYTHON=3.6 CPP=11 GCC=4.8
-      addons:
-        apt:
-          sources: [deadsnakes]
-          packages: [python3.6-dev python3.6-venv, cmake=2.\*, cmake-data=2.\*]
+      python: 3.6
+      env: PYTHON=3.6
     - os: osx
       python: 3.4
       language: generic
@@ -122,6 +113,8 @@ before_script:
 
   - |
     # Run cmake
+    git submodule init
+    git submodule update
     mkdir build
     cd build
     cmake ..
