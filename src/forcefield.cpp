@@ -84,32 +84,32 @@ public:
         PYBIND11_OVERLOAD_PURE( bool, OBForceField, Energy);
     }
 
-    double E_Bond(bool UNUSED(gradients) = true) {
-        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_Bond, UNUSED(gradients));
+    double E_Bond(bool UNUSED_gradients = true) {
+        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_Bond, UNUSED_gradients);
     }
 
-    double E_Angle(bool UNUSED(gradients) = true) {
-        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_Angle, UNUSED(gradients));
+    double E_Angle(bool UNUSED_gradients = true) {
+        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_Angle, UNUSED_gradients);
     }
 
-    double E_StrBnd(bool UNUSED(gradients) = true) {
-        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_StrBnd, UNUSED(gradients));
+    double E_StrBnd(bool UNUSED_gradients = true) {
+        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_StrBnd, UNUSED_gradients);
     }
 
-    double E_Torsion(bool UNUSED(gradients) = true) {
-        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_Torsion, UNUSED(gradients));
+    double E_Torsion(bool UNUSED_gradients = true) {
+        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_Torsion, UNUSED_gradients);
     }
 
-    double E_OOP(bool UNUSED(gradients) = true) {
-        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_OOP, UNUSED(gradients));
+    double E_OOP(bool UNUSED_gradients = true) {
+        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_OOP, UNUSED_gradients);
     }
 
-    double E_VDW(bool UNUSED(gradients) = true) {
-        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_VDW, UNUSED(gradients));
+    double E_VDW(bool UNUSED_gradients = true) {
+        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_VDW, UNUSED_gradients);
     }
 
-    double E_Electrostatic(bool UNUSED(gradients) = true) {
-        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_Electrostatic, UNUSED(gradients));
+    double E_Electrostatic(bool UNUSED_gradients = true) {
+        PYBIND11_OVERLOAD_PURE( double, OBForceField, E_Electrostatic, UNUSED_gradients);
     }
 
     bool Validate() {

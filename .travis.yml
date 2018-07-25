@@ -56,7 +56,9 @@ before_install:
         PYVER=3.4
         # Install the latest release of the specified Python version using pyenv.
         PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-        pyenv install $PYVER
+        if [[ $PYVER != `python --version` ]]; then
+          pyenv install $PYVER
+        fi
         pyenv global $PYVER
         echo "Selected Python $PYVER"
         python --version
@@ -65,7 +67,9 @@ before_install:
         PYVER=3.5
         # Install the latest release of the specified Python version using pyenv.
         PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-        pyenv install $PYVER
+        if [[ $PYVER != `python --version` ]]; then
+          pyenv install $PYVER
+        fi
         pyenv global $PYVER
         echo "Selected Python $PYVER"
         python --version
@@ -74,7 +78,9 @@ before_install:
         PYVER=3.6
         # Install the latest release of the specified Python version using pyenv.
         PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-        pyenv install $PYVER
+        if [[ $PYVER != `python --version` ]]; then
+          pyenv install $PYVER
+        fi
         pyenv global $PYVER
         echo "Selected Python $PYVER"
         python --version
@@ -118,8 +124,6 @@ before_script:
 
   - |
     # Run cmake
-    git submodule init
-    git submodule update
     mkdir build
     cd build
     cmake ..
