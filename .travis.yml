@@ -6,13 +6,26 @@ os:
   - linux
   - osx
 
-python:
-  - 3.4
-  - 3.5
-  - 3.6
-
 matrix:
   include:
+    - os: linux
+      env: PYTHON=3.4 CPP=11 GCC=4.8
+      addons:
+        apt:
+          sources: [deadsnakes]
+          packages: [python3.4-dev python3.4-venv, cmake=2.\*, cmake-data=2.\*]
+    - os: linux
+      env: PYTHON=3.5 CPP=11 GCC=4.8
+      addons:
+        apt:
+          sources: [deadsnakes]
+          packages: [python3.5-dev python3.5-venv, cmake=2.\*, cmake-data=2.\*]
+    - os: linux
+      env: PYTHON=3.6 CPP=11 GCC=4.8
+      addons:
+        apt:
+          sources: [deadsnakes]
+          packages: [python3.6-dev python3.6-venv, cmake=2.\*, cmake-data=2.\*]
     - os: osx
       python: 3.4
       language: generic
