@@ -44,6 +44,7 @@ before_install:
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
       sudo apt-get update -qq
+      sudo apt-get install zlib1g-dev
     else
       brew update
       brew cask uninstall oclint
@@ -56,9 +57,7 @@ before_install:
         PYVER=3.4
         # Install the latest release of the specified Python version using pyenv.
         PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-        if [[ $PYVER != `python --version` ]]; then
-          pyenv install $PYVER
-        fi
+        pyenv install $PYVER
         pyenv global $PYVER
         echo "Selected Python $PYVER"
         python --version
@@ -67,9 +66,7 @@ before_install:
         PYVER=3.5
         # Install the latest release of the specified Python version using pyenv.
         PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-        if [[ $PYVER != `python --version` ]]; then
-          pyenv install $PYVER
-        fi
+        pyenv install $PYVER
         pyenv global $PYVER
         echo "Selected Python $PYVER"
         python --version
@@ -78,7 +75,7 @@ before_install:
         PYVER=3.6
         # Install the latest release of the specified Python version using pyenv.
         PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-        if [[ $PYVER != `python --version` ]]; then
+        if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
           pyenv install $PYVER
         fi
         pyenv global $PYVER
