@@ -49,9 +49,10 @@ before_install:
     else
       brew update
       brew cask uninstall oclint
+      brew install gcc@5 --without-multilib
       brew outdated pyenv || brew upgrade pyenv
       eval "$(pyenv init -)"
-      
+
       case "${TOXENV}" in
         py34)
           PYVER=3.4
@@ -81,6 +82,9 @@ before_install:
           python --version
           ;;
       esac
+
+      export CC=gcc-5
+      export CXX=g++-5
    fi
 
 install:
