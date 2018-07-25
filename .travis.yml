@@ -15,7 +15,7 @@ matrix:
       addons:
         apt:
           sources: [deadsnakes]
-          packages: [python3.4, python3.4-pip, python3.4-dev, python3.4-venv]
+          packages: [python3.4, python3.4-dev, python3.4-venv]
     - os: linux
       python: 3.5
       language: generic
@@ -23,7 +23,7 @@ matrix:
       addons:
         apt:
           sources: [deadsnakes]
-          packages: [python3.5, python3.5-pip, python3.5-dev, python3.5-venv]
+          packages: [python3.5, python3.5-dev, python3.5-venv]
     - os: linux
       python: 3.6
       language: generic
@@ -31,7 +31,7 @@ matrix:
       addons:
         apt:
           sources: [deadsnakes]
-          packages: [python3.6, python3.6-pip, python3.6-dev, python3.6-venv]
+          packages: [python3.6, python3.6-dev, python3.6-venv]
     - os: osx
       python: 3.4
       language: generic
@@ -57,11 +57,11 @@ before_install:
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
       sudo apt-get update
       sudo apt-get remove python3 python3-dev
-      sudo apt-get install python${PYTHON} python${PYTHON}-pip python${PYTHON}-dev python${PYTHON}-venv
+      sudo apt-get install python${PYTHON} python${PYTHON}-dev python${PYTHON}-venv
     else
       brew update
       brew cask uninstall oclint
-      brew install gcc@5 --without-multilib
+      brew install gcc@4.8 --without-multilib
       brew outdated pyenv || brew upgrade pyenv
       eval "$(pyenv init -)"
 
@@ -95,8 +95,8 @@ before_install:
           ;;
       esac
 
-      export CC=gcc-5
-      export CXX=g++-5
+      export CC=gcc-4.8
+      export CXX=g++-4.8
 
     fi
 
