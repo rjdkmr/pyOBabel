@@ -17,7 +17,7 @@ add_library(pyOBabel MODULE
            )
 
 
-target_link_libraries(pyOBabel PUBLIC ${OPENBABEL2_LIBRARIES} PRIVATE pybind11::module "-fvisibility=hidden")
+target_link_libraries(pyOBabel PUBLIC ${ZLIB_LIBRARY} ${OPENBABEL2_LIBRARIES} PRIVATE pybind11::module "-fvisibility=hidden")
 set_target_properties(pyOBabel PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}"
                                           SUFFIX "${PYTHON_MODULE_EXTENSION}"
                                           LIBRARY_OUTPUT_DIRECTORY ${OBABEL_PYTHON_OUTPUT_DIRECTORY}
