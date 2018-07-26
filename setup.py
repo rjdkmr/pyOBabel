@@ -101,9 +101,10 @@ ext_modules = [
             'src',
         ],
         library_dirs=[openbabel_lib_dir],
-        libraries=['openbabel'],
+        libraries=['openbabel', 'z'],
         language='c++',
-        extra_compile_args=['-Wno-strict-prototypes']
+        extra_compile_args=['-Wno-strict-prototypes'],
+        export_symbols=['crc32', 'deflateInit2_']
     ),
 ]
 
