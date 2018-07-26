@@ -67,7 +67,7 @@ install:
   - python -m pip install --upgrade wheel
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-      python-m pip install auditwheel
+      python -m pip install auditwheel
       sudo apt-get install libeigen3-dev
     else
       brew install eigen
@@ -103,12 +103,10 @@ before_script:
     # Run cmake
     mkdir build
     cd build
-    if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-        cmake ..
-    else
-        PY_CMD="$(python -c "import sys; print(sys.executable)")"
-        cmake -DPYTHON_EXECUTABLE:FILEPATH=$PY_CMD ..
-    fi
+    PYTHON_EXECUTABLE="$(python -c "import sys; print(sys.executable)")"
+    PYTHON_INCLUDE_DIR="$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")"
+    PYTHON_LIBRARY="$(python -c "import distutils.sysconfig as sysconfig; import os; print(os.path.join(sysconfig.get_config_var('LIBDIR'), sysconfig.get_config_var('LDLIBRARY')))")"
+    cmake -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_DIR -DPYTHON_LIBRARY=$PYTHON_LIBRARY  ..
     make -j2
     cd ..
 
