@@ -120,13 +120,15 @@ before_script:
     PYTHON_LIBRARY="$(python -c "import distutils.sysconfig as sysconfig; import os; print(os.path.join(sysconfig.get_config_var('LIBDIR'), sysconfig.get_config_var('LDLIBRARY')))")"
     cmake -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_DIR -DPYTHON_LIBRARY=$PYTHON_LIBRARY  ..
     make -j2
-    ldd src/*.so
     cd ..
 
 script:
-   - ldd pyOBabel/*.so
    - python -m pip install -ve .
-   - python -c 'import pyOBabel'
+   - |
+     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+     	export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib:/usr/lib
+     fi
+     python -c 'import pyOBabel'
 
 
 after_success:
