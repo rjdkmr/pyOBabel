@@ -138,7 +138,7 @@ script:
       else
         python -m pip install -ve .
      fi
-  -  |
+   - |
      if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
         python3 -c 'import pyOBabel'
       else
