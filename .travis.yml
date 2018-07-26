@@ -84,12 +84,14 @@ install:
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
       python -m pip install auditwheel
+      sudo python -m pip install --upgrade pip
+      sudo python -m pip install --upgrade wheel
       sudo apt-get install libeigen3-dev
     else
       brew install eigen
+      python -m pip install --upgrade pip
+      python -m pip install --upgrade wheel
     fi
-    python -m pip install --upgrade pip
-    python -m pip install --upgrade wheel
 
 before_script:
   - |
