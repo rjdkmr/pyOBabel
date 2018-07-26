@@ -1,6 +1,6 @@
 # After changing this file, check it on:
 #   http://lint.travis-ci.org/
-language: cpp
+# language: cpp
 
 os:
   - linux
@@ -35,15 +35,15 @@ matrix:
     - os: osx
       python: 3.4
       language: generic
-      env: TOXENV=py34
+      env: PYTHON=3.4
     - os: osx
       python: 3.5
       language: generic
-      env: TOXENV=py35
+      env: PYTHON=3.5
     - os: osx
       python: 3.6
       language: generic
-      env: TOXENV=py36
+      env: PYTHON=3.6
   allow_failures:
     - os: osx
 
@@ -67,38 +67,16 @@ before_install:
       brew outdated pyenv || brew upgrade pyenv
       eval "$(pyenv init -)"
 
-      case "${TOXENV}" in
-        py34)
-          PYVER=3.4
-          # Install the latest release of the specified Python version using pyenv.
-          PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-          pyenv install $PYVER
-          pyenv global $PYVER
-          echo "Selected Python $PYVER"
-          python --version
-          ;;
-        py35)
-          PYVER=3.5
-          # Install the latest release of the specified Python version using pyenv.
-          PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-          pyenv install $PYVER
-          pyenv global $PYVER
-          echo "Selected Python $PYVER"
-          python --version
-          ;;
-        py36)
-          PYVER=3.6
-          # Install the latest release of the specified Python version using pyenv.
-          PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
-          pyenv install $PYVER
-          pyenv global $PYVER
-          echo "Selected Python $PYVER"
-          python --version
-          ;;
-      esac
+      PYVER=${PYTHON}
+      # Install the latest release of the specified Python version using pyenv.
+      PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
+      pyenv install $PYVER
+      pyenv global $PYVER
+      echo "Selected Python $PYVER"
+      python --version
 
-      export CC=gcc
-      export CXX=g++
+      export CC=gcc-8
+      export CXX=g++-8
 
     fi
 
@@ -110,6 +88,8 @@ install:
     else
       brew install eigen
     fi
+    python -m pip install --upgrade pip
+    python -m pip install --upgrade wheel
 
 before_script:
   - |
@@ -138,10 +118,14 @@ before_script:
 
   - |
     # Run cmake
-    PY_CMD="$(python -c "import sys; print(sys.executable)")"
     mkdir build
     cd build
-    cmake -DPYTHON_EXECUTABLE:FILEPATH=$PY_CMD ..
+    if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+        cmake ..
+    else
+        PY_CMD="$(python -c "import sys; print(sys.executable)")"
+        cmake -DPYTHON_EXECUTABLE:FILEPATH=$PY_CMD ..
+    fi
     make -j2
     cd ..
 
