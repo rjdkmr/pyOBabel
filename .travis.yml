@@ -81,8 +81,8 @@ before_install:
     fi
 
 install:
-   - python -m pip install --upgrade pip
-   - python -m pip install --upgrade wheel
+  - python -m pip install --upgrade pip
+  - python -m pip install --upgrade wheel
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
       python-m pip install auditwheel
