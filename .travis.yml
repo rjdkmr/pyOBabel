@@ -4,6 +4,7 @@ language: python
 sudo: false
 
 python:
+  - 2.7
   - 3.4
   - 3.5
   - 3.6
@@ -13,7 +14,20 @@ os:
 
 
 matrix:
+  exclude:
+    - os: osx
+      python: 2.7
+    - os: osx
+      python: 3.4
+    - os: osx
+      python: 3.5
+    - os: osx
+      python: 3.6
   include:
+    - os: osx
+      python: 2.7
+      language: generic
+      env: PYTHON=3.4
     - os: osx
       python: 3.4
       language: generic
@@ -38,10 +52,6 @@ before_install:
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
       sudo apt-get update -qq
-      # sudo apt-get remove python3 python3-dev
-      # sudo apt-get install python${PYTHON} python${PYTHON}-dev python${PYTHON}-venv
-      # alias python=python3
-      # echo "alias python=python3" >> ~/.bashrc
     else
       brew update
       brew cask uninstall oclint
@@ -83,7 +93,8 @@ before_script:
     cd openbabel
     mkdir build
     cd build
-    cmake -DBUILD_SHARED=no -DCMAKE_POSITION_INDEPENDENT_CODE=on ..
+    OTHER_ARGS="-DCMAKE_C_FLAGS='-static' -DCMAKE_CXX_FLAGS='-static'
+    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON $OTHER_ARGS ..
     make -j2
     sudo make install
     cd ..
@@ -108,9 +119,11 @@ before_script:
     PYTHON_LIBRARY="$(python -c "import distutils.sysconfig as sysconfig; import os; print(os.path.join(sysconfig.get_config_var('LIBDIR'), sysconfig.get_config_var('LDLIBRARY')))")"
     cmake -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_DIR -DPYTHON_LIBRARY=$PYTHON_LIBRARY  ..
     make -j2
+    ldd src/*.so
     cd ..
 
 script:
+   - ldd pyOBabel/*.so
    - python -m pip install -ve .
    - python -c 'import pyOBabel'
 
@@ -134,7 +147,7 @@ after_success:
       pip wheel --no-deps --no-cache-dir -w wheels .
       auditwheel show wheels/*.whl
       auditwheel repair wheels/*.whl
-      twine upload --skip-existing wheelhouse/*
+      # twine upload --skip-existing wheelhouse/*
     else
       python setup.py bdist_wheel
     fi

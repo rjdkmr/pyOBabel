@@ -75,17 +75,6 @@ set(OBabel_PythonDir "${PYTHON_INSTDIR}/pyOpenBabel")
 find_package(OpenBabel2 REQUIRED)
 include_directories(${OPENBABEL2_INCLUDE_DIR})
 
-## Problem in TRAVIS
-find_package(ZLIB)
-if(ZLIB_FOUND)
-  add_definitions(-DHAVE_LIBZ)
-  include_directories(${ZLIB_INCLUDE_DIR})
-  # Longstanding unsolved problem with compression under Windows
-  if(WIN32)
-    add_definitions(-DDISABLE_WRITE_COMPRESSION)
-  endif()
-endif()
-
 # Add pybind11
 set(PYBIND11_CPP_STANDARD -std=c++11)
 add_subdirectory(pybind11)
