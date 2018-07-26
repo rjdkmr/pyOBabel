@@ -108,27 +108,10 @@ before_script:
     ./configure && make && sudo make install
     cd ..
     cd ..
-
-
-  - |
-    # Run cmake
-    mkdir build
-    cd build
-    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib/x86_64-linux-gnu:/usr/local/lib:/usr/lib
-    PYTHON_EXECUTABLE="$(python -c "import sys; print(sys.executable)")"
-    PYTHON_INCLUDE_DIR="$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")"
-    PYTHON_LIBRARY="$(python -c "import distutils.sysconfig as sysconfig; import os; print(os.path.join(sysconfig.get_config_var('LIBDIR'), sysconfig.get_config_var('LDLIBRARY')))")"
-    cmake -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_DIR -DPYTHON_LIBRARY=$PYTHON_LIBRARY  ..
-    make -j2
-    cd ..
+  - python -m pip install -ve .
 
 script:
-   - python -m pip install -ve .
-   - |
-     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-     	export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib/x86_64-linux-gnu:/usr/local/lib:/usr/lib
-     fi
-   - python -c 'import pyOBabel'
+  - python -c 'import pyOBabel'
 
 
 after_success:
