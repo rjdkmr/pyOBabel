@@ -27,7 +27,7 @@ matrix:
     - os: osx
       python: 2.7
       language: generic
-      env: PYTHON=3.4
+      env: PYTHON=2.7
     - os: osx
       python: 3.4
       language: generic
@@ -93,8 +93,9 @@ before_script:
     cd openbabel
     mkdir build
     cd build
-    OTHER_ARGS="-DCMAKE_C_FLAGS='-static' -DCMAKE_CXX_FLAGS='-static'"
-    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON $OTHER_ARGS ..
+    # OTHER_ARGS="-DCMAKE_C_FLAGS='-static' -DCMAKE_CXX_FLAGS='-static'"
+    # cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON $OTHER_ARGS ..
+    cmake ..
     make -j2
     sudo make install
     cd ..
