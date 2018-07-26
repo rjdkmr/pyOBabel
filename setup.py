@@ -52,9 +52,9 @@ def read(fname):
 setup(
     name='pyOBabel',
     version='0.1.1',
-
+    data_files = ['pyOBabel/pyOBabel.so'], 
     # metadata for upload to pypi
-    author = "Rajendra Kumar",
+    author = "Rajendra Kumar",	
     author_email = "rjdkmr@gmail.com",
     url = 'https://github.com/rjdkmr/pyOBabel',
     description = "A python binding to openbabel chemical toolbox (http://openbabel.org)",

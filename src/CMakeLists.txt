@@ -23,7 +23,7 @@ target_link_libraries(pyOBabel PUBLIC ${OPENBABEL2_LIBRARIES} PRIVATE pybind11::
 #                                          LIBRARY_OUTPUT_DIRECTORY ${OBABEL_PYTHON_OUTPUT_DIRECTORY}
 #                     )
 
-set_target_properties(pyOBabel LIBRARY_OUTPUT_DIRECTORY ${OBABEL_PYTHON_OUTPUT_DIRECTORY} )
+set_target_properties(pyOBabel PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}" LIBRARY_OUTPUT_DIRECTORY ${OBABEL_PYTHON_OUTPUT_DIRECTORY} )
 
 
 INSTALL(TARGETS pyOBabel
