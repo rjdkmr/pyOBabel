@@ -171,6 +171,7 @@ setup(
     version='0.1.1',
     ext_modules=ext_modules,
     cmdclass={'build_ext': BuildExt},
+    install_requires=['pkgconfig>=1.3', 'pybind11>=2.2'],
     # metadata for upload to pypi
     author = "Rajendra Kumar",	
     author_email = "rjdkmr@gmail.com",
