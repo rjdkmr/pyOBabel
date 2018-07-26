@@ -95,8 +95,7 @@ before_script:
     cd openbabel
     mkdir build
     cd build
-    OTHER_ARGS="-DCMAKE_C_FLAGS='-static' -DCMAKE_CXX_FLAGS='-static'"
-    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON $OTHER_ARGS ..
+    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON ..
     make -j2
     sudo make install
     cd ..
