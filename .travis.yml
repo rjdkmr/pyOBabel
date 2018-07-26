@@ -1,6 +1,6 @@
 # After changing this file, check it on:
 #   http://lint.travis-ci.org/
-# language: cpp
+language: python
 
 os:
   - linux
@@ -83,9 +83,9 @@ before_install:
 install:
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-      python -m pip install auditwheel
-      sudo python -m pip install --upgrade pip
-      sudo python -m pip install --upgrade wheel
+      sudo python3 -m pip install auditwheel
+      sudo python3 -m pip install --upgrade pip
+      sudo python3 -m pip install --upgrade wheel
       sudo apt-get install libeigen3-dev
     else
       brew install eigen
@@ -132,8 +132,19 @@ before_script:
     cd ..
 
 script:
-  - python -m pip install -ve .
-  - python -c 'import pyOBabel'
+   - |
+     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+        sudo python3 -m pip install -ve .
+      else
+        python -m pip install -ve .
+     fi
+  -  |
+     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+        python3 -c 'import pyOBabel'
+      else
+        python -c 'import pyOBabel'
+     fi
+
 
 after_success:
   # Specify account details for PyPI
