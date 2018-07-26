@@ -81,17 +81,16 @@ before_install:
     fi
 
 install:
+   - python -m pip install --upgrade pip
+   - python -m pip install --upgrade wheel
   - |
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-      sudo python3 -m pip install auditwheel
-      sudo python3 -m pip install --upgrade pip
-      sudo python3 -m pip install --upgrade wheel
+      python-m pip install auditwheel
       sudo apt-get install libeigen3-dev
     else
       brew install eigen
-      python -m pip install --upgrade pip
-      python -m pip install --upgrade wheel
     fi
+
 
 before_script:
   - |
@@ -132,18 +131,8 @@ before_script:
     cd ..
 
 script:
-   - |
-     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-        sudo python3 -m pip install -ve .
-      else
-        python -m pip install -ve .
-     fi
-   - |
-     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-        python3 -c 'import pyOBabel'
-      else
-        python -c 'import pyOBabel'
-     fi
+   - python -m pip install -ve .
+   - python -c 'import pyOBabel'
 
 
 after_success:
