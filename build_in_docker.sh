@@ -57,7 +57,7 @@ for PYBIN in /opt/python/*/bin; do
 done
 
 # Bundle external shared libraries into the wheels
-for whl in wheelhouse/*.whl; do
+for whl in /io/wheelhouse/*.whl; do
     auditwheel show "$whl" 
     auditwheel repair "$whl" -w /io/wheelhouse/
 done
@@ -67,5 +67,3 @@ for PYBIN in /opt/python/*/bin/; do
     "${PYBIN}/pip" install pyOBabel --no-index -f /io/wheelhouse
     "${PYBIN}/python" -c "import pyOBabel; print('=====\nTEST -- pyOBabel.openbabel version: ', pyOBabel.version_OB(), '\n=====')"
 done
-
-ls -lrt /io/wheelhouse/

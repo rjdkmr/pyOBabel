@@ -106,24 +106,11 @@ before_script:
       cd openbabel
       mkdir build
       cd build
-      cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON ..
+      cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DWITH_INCHI=ON -DWITH_STATIC_INCHI=ON ..
       make -j2
       sudo make install
       cd ..
       cd ..
-    fi
-
-  - |
-    if [[ -z ${DOCKER_IMAGE} ]]; then
-      if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-         # Install patchelf
-         git clone https://github.com/NixOS/patchelf
-         cd patchelf
-         ./bootstrap.sh
-         ./configure && make && sudo make install
-         cd ..
-         cd ..
-      fi
     fi
   - |
     if [[ -z ${DOCKER_IMAGE} ]]; then
@@ -142,8 +129,6 @@ script:
     if [[ -n ${DOCKER_IMAGE} ]]; then
         ls wheelhouse/*
     fi
-
-
 
 
 after_success:
