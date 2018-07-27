@@ -133,20 +133,10 @@ script:
 
 
 after_success:
-  # Specify account details for PyPI
-  - |
-    echo "[distutils]"                                  > ~/.pypirc
-    echo "index-servers ="                             >> ~/.pypirc
-    echo "    pypi"                                    >> ~/.pypirc
-    echo "[pypi]"                                      >> ~/.pypirc
-    echo "username=rjdkmr"                             >> ~/.pypirc
-    echo "password=$PYPIPASSWORD"                      >> ~/.pypirc
-
-  # For OS X and tags only, build a Python source distribution and "binary
-  # wheel" and upload these to PyPI. Note that the source upload will only
-  # succeed the first time and will be skipped by twine in subsiquent attempts.
   - |
     pip install --upgrade twine
+    export TWINE_USERNAME=rjdkmr
+    export TWINE_PASSWORD=$PYPIPASSWORD
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
       if [[ -n ${DOCKER_IMAGE} ]]; then
         twine upload --skip-existing wheelhouse/*
