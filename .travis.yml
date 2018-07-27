@@ -97,7 +97,7 @@ before_script:
     cd openbabel
     mkdir build
     cd build
-    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DWITH_INCHI=ON -DWITH_STATIC_INCHI=ON -DCMAKE_CXX_FLAGS=-fvisibility-hidden ..
+    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DWITH_INCHI=ON -DWITH_STATIC_INCHI=ON -DCMAKE_CXX_FLAGS=-fvisibility=hidden ..
     make -j2
     sudo make install
     cd ..
