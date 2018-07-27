@@ -101,10 +101,11 @@ ext_modules = [
             'src',
         ],
         library_dirs=[openbabel_lib_dir],
-        libraries=['openbabel', 'z'],
+        libraries=['openbabel', 'inchi', 'z'],
         language='c++',
-        extra_compile_args=['-Wno-strict-prototypes'],
-        export_symbols=['crc32', 'deflateInit2_']
+        extra_compile_args=['-Wno-strict-prototypes', '-static-libstdc++'], # Got From https://github.com/pypa/manylinux/issues/118
+        extra_link_args=['-static-libstdc++'],
+        # export_symbols=['GetINCHIKeyFromINCHI']
     ),
 ]
 

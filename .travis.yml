@@ -24,6 +24,11 @@ matrix:
     - os: osx
       python: 3.6
   include:
+    - sudo: required
+      python: 3.6
+      services:
+      - docker
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
     - os: osx
       python: 2.7
       language: generic
@@ -84,35 +89,61 @@ install:
     else
       brew install eigen
     fi
+  - |
+    if [[ -n "$DOCKER_IMAGE" ]]; then
+      docker pull $DOCKER_IMAGE
+    fi
+
 
 
 before_script:
   - |
-    # At first instal openbabel
-    mkdir external
-    cd external
-    git clone https://github.com/openbabel/openbabel
-    cd openbabel
-    mkdir build
-    cd build
-    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON ..
-    make -j2
-    sudo make install
-    cd ..
-    cd ..
+    if [[ -z ${DOCKER_IMAGE} ]]; then
+      # At first instal openbabel
+      mkdir external
+      cd external
+      git clone https://github.com/openbabel/openbabel
+      cd openbabel
+      mkdir build
+      cd build
+      cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON ..
+      make -j2
+      sudo make install
+      cd ..
+      cd ..
+    fi
 
   - |
-    # Install patchelf
-    git clone https://github.com/NixOS/patchelf
-    cd patchelf
-    ./bootstrap.sh
-    ./configure && make && sudo make install
-    cd ..
-    cd ..
-  - python -m pip install -ve .
+    if [[ -z ${DOCKER_IMAGE} ]]; then
+      if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+         # Install patchelf
+         git clone https://github.com/NixOS/patchelf
+         cd patchelf
+         ./bootstrap.sh
+         ./configure && make && sudo make install
+         cd ..
+         cd ..
+      fi
+    fi
+  - |
+    if [[ -z ${DOCKER_IMAGE} ]]; then
+       python -m pip install -ve .
+    fi
+    
 
 script:
-  - python -c 'import pyOBabel'
+  - |
+    if [[ -z ${DOCKER_IMAGE} ]]; then
+        python -c 'import pyOBabel'
+    else
+       docker run --rm -v `pwd`:/io ${DOCKER_IMAGE} /io/build_in_docker.sh
+    fi
+  - |
+    if [[ -n ${DOCKER_IMAGE} ]]; then
+        ls wheelhouse/*
+    fi
+
+
 
 
 after_success:
@@ -131,12 +162,12 @@ after_success:
   - |
     pip install --upgrade twine
     if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-      pip wheel --no-deps --no-cache-dir -w wheels .
-      auditwheel show wheels/*.whl
-      auditwheel repair wheels/*.whl
-      # twine upload --skip-existing wheelhouse/*
+      if [[ -n ${DOCKER_IMAGE} ]]; then
+        # twine upload --skip-existing wheelhouse/*
+        echo "doing nothing"
+      fi
     else
-      python setup.py bdist_wheel
+     python setup.py bdist_wheel
+     # twine upload --skip-existing dist/*
     fi
-  
-# - twine upload --skip-existing dist/*
+
