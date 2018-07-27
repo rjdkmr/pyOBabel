@@ -1,0 +1,4 @@
+nbsphinx>=0.2.8
+jupyter_client>=4.1.0
+ipython>=6.0.0
+pyOBabel>=0.1.1

@@ -174,6 +174,7 @@ setup(
     ext_modules=ext_modules,
     cmdclass={'build_ext': BuildExt},
     install_requires=['pkgconfig>=1.3', 'pybind11>=2.2'],
+    packages=find_packages(),
     # metadata for upload to pypi
     author = "Rajendra Kumar",	
     author_email = "rjdkmr@gmail.com",
@@ -191,8 +192,6 @@ setup(
         'Natural Language :: English',
         'Operating System :: MacOS',
         'Operating System :: POSIX :: Linux',
-        'Topic :: Scientific/Engineering :: Chemoinformatics',
-        'Topic :: Scientific/Engineering :: Computational Chemistry',
-        'Topic :: Scientific/Engineering :: Computational Drug Design',
+        'Topic :: Scientific/Engineering :: Bio-Informatics',
     ],
 )
