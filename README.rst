@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/rjdkmr/pyOBabel.svg?branch=master
+    :target: https://travis-ci.org/rjdkmr/pyOBabel
+
 pyOBabel
 ========
 

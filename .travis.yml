@@ -111,6 +111,7 @@ before_script:
       sudo make install
       cd ..
       cd ..
+      cd ..
     fi
   - |
     if [[ -z ${DOCKER_IMAGE} ]]; then
