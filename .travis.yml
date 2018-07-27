@@ -46,7 +46,7 @@ matrix:
 env:
   global:
     # $PYPIPASSWORD
-    secure: qVYkIrk3xnr+5tr09F5rCjMYzFK6KABpkTLFwiqN+H2ZoTdgy2zEwkHVyoLF6mdYtm8ew4GDypB50BnLPrahfnTObjq48eHosqV1xgH2LCe6bhoNuUzil+e2m47rGf4hxU+Ryo4KbVNYF/4mEK4joK5chy8FgKKCO5JG5LUyPpxyMdBUAqTe2o6utQqFin+n/ZtOv4rRMhN3dJhFiLFEY6AfkK+qPwrc1dq5Iys90HYUKD5JddRe+gARSkFDMN9PHqxgL8c+wNbqpOcuAcPE1CQN3AHeXeirYPcG9n4egkRxRArJTffvh02UccL387VvFCP9HVVcOGaDyjWtE1EVAF7Hz/HuqZN4e8OoQvbxWuyiZoE63b2DiaSPBt204DfjgG7KJf/UzH4IV6dZ8PanPXkPmGJp+C2l5CrGuCSUfrGvIKO92g7072WdSoph3yXr56lFdCT0hKc4OrJtoOCKRBcFgfBwbfiuBEHuMkHWqaFTLnRtS5pIrqWkHw+RX7hWIJzpAIVZK0GTgPuFqvlrJIg3Q9/w3tqhTegvTZxYeLX3qAkkVXpEgzY92/KE42gP0EXJvXub/CCGJ/6c8T3R8wvimY5Y6eMiFDveAskOVWpL1qdxw1jXqw5dkpXsMofR6Zg3EzjMw/hUcEtt64oQMhNsOlWLRO+depiYgdj+JAE=
+    secure: qo57dxY6zF76pgz34Qq5a4W0o/ra9hMCAg6xivX7XOehE6vyN/tQkm5V9ZknvXEnwHZDDPu3568Tmdm4D59FtNsOedZHNrtroCKnOZnRZfsWhQYDzK7/7QnlqWBbPRdw9AgdipND3RK85gySsne7SUlDRrF2DRvKefxgeXPysR8URRHDbcCPxFDkdKbpXOEbn2ur8hC1ipKwqxEWkK5fQEmayYkNQOFmnjyRukGoH5JT48QOMJUsDWLfrDq6kpyAI3nk4RNw32tgavOQ28UCefj8gf/JXbsqVq8hW/L4LQLN7eai97hqz3Ew4MsqleDDroY88axTkMJG/dBg55YASs7ZwJYaIMBrryAAmXj+uB4TzDN/uKdZpkPek6WzuLKmcOb7K1WCYuqTPXbEdsJSkKtxz9xFGF9P1/jKFcQK0t+RalvL+i11hGsrkDfNu4xehmdKHzKiyUcH7wxOWc3iG4kbmmYUMY0Ynf+zSCE/GJ2ABRp24k1dfwJnd1WflqhGyIcd3jrzGX7zEI4TWPA/37XYx9S6fG7MdX2vbJliRGxzWWUKXECcSRqZH8bx3gdUeM00zbBS9v7xfYVcu9c3VxhxOz3U5XKzbozeffysOhpRuxMAze6M+fH6pF/Yq335qB699Qm4JctP30itXTH463fpc4L1/kQ+YoRJ16VFjSs=
 
 before_install:
 - |
@@ -120,28 +120,26 @@ script:
       ls wheelhouse/*
   fi
 after_success:
-  # Specify account details for PyPI
-  - |
-    echo "[distutils]"                                  > ~/.pypirc
-    echo "index-servers ="                             >> ~/.pypirc
-    echo "    pypi"                                    >> ~/.pypirc
-    echo "[pypi]"                                      >> ~/.pypirc
-    echo "    username:rjdkmr"                         >> ~/.pypirc
-    echo "    password:$PYPIPASSWORD"                  >> ~/.pypirc
-    echo "[server-login]"                              >> ~/.pypirc
-    echo "    username:rjdkmr"                         >> ~/.pypirc
-    echo "    password:$PYPIPASSWORD"                  >> ~/.pypirc
-    
-  - |
-    pip install --upgrade twine
-    export TWINE_USERNAME=rjdkmr
-    export TWINE_PASSWORD=$PYPIPASSWORD
-    if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
-      if [[ -n ${DOCKER_IMAGE} ]]; then
-        twine upload --skip-existing wheelhouse/*
-      fi
-    else
-     pip wheel -w wheelhouse/ --no-deps --no-cache-dir .
-     twine upload --skip-existing wheelhouse/*
+- |
+  echo "[distutils]"                                  > ~/.pypirc
+  echo "index-servers ="                             >> ~/.pypirc
+  echo "    pypi"                                    >> ~/.pypirc
+  echo "[pypi]"                                      >> ~/.pypirc
+  echo "    username:rjdkmr"                         >> ~/.pypirc
+  echo "    password:$PYPIPASSWORD"                  >> ~/.pypirc
+  echo "[server-login]"                              >> ~/.pypirc
+  echo "    username:rjdkmr"                         >> ~/.pypirc
+  echo "    password:$PYPIPASSWORD"                  >> ~/.pypirc
+- |
+  pip install --upgrade twine
+  export TWINE_USERNAME=rjdkmr
+  export TWINE_PASSWORD=$PYPIPASSWORD
+  if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
+    if [[ -n ${DOCKER_IMAGE} ]]; then
+      twine upload -u rjdkmr -p $PYPIPASSWORD --skip-existing  wheelhouse/*
+    fi
+  else
+   pip wheel -w wheelhouse/ --no-deps --no-cache-dir .
+   twine upload -u rjdkmr -p $PYPIPASSWORD --skip-existing  wheelhouse/*
   fi
 
