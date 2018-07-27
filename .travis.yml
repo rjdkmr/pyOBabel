@@ -97,7 +97,7 @@ before_script:
     cd openbabel
     mkdir build
     cd build
-    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DWITH_INCHI=ON -DWITH_STATIC_INCHI=ON ..
+    cmake -DBUILD_SHARED=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DWITH_INCHI=ON -DWITH_STATIC_INCHI=ON -DCMAKE_CXX_FLAGS=-fvisibility-hidden ..
     make -j2
     sudo make install
     cd ..
@@ -125,18 +125,18 @@ after_success:
   echo "index-servers ="                             >> ~/.pypirc
   echo "    pypi"                                    >> ~/.pypirc
   echo "[pypi]"                                      >> ~/.pypirc
-  echo "    username:rjdkmr"                         >> ~/.pypirc
-  echo "    password:$PYPIPASSWORD"                  >> ~/.pypirc
+  echo "    username: rjdkmr"                         >> ~/.pypirc
+  echo "    password: $PYPIPASSWORD"                  >> ~/.pypirc
   echo "[server-login]"                              >> ~/.pypirc
-  echo "    username:rjdkmr"                         >> ~/.pypirc
-  echo "    password:$PYPIPASSWORD"                  >> ~/.pypirc
+  echo "    username: rjdkmr"                         >> ~/.pypirc
+  echo "    password: $PYPIPASSWORD"                  >> ~/.pypirc
 - |
   pip install --upgrade twine
   export TWINE_USERNAME=rjdkmr
   export TWINE_PASSWORD=$PYPIPASSWORD
   if [[ $TRAVIS_OS_NAME != 'osx' ]]; then
     if [[ -n ${DOCKER_IMAGE} ]]; then
-      twine upload -u rjdkmr -p $PYPIPASSWORD --skip-existing  wheelhouse/*
+      twine upload -u rjdkmr -p $PYPIPASSWORD --skip-existing  wheelhouse/*manylinux1_x86_64.whl
     fi
   else
    pip wheel -w wheelhouse/ --no-deps --no-cache-dir .
