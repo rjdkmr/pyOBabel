@@ -133,6 +133,18 @@ script:
 
 
 after_success:
+  # Specify account details for PyPI
+  - |
+    echo "[distutils]"                                  > ~/.pypirc
+    echo "index-servers ="                             >> ~/.pypirc
+    echo "    pypi"                                    >> ~/.pypirc
+    echo "[pypi]"                                      >> ~/.pypirc
+    echo "    username:rjdkmr"                         >> ~/.pypirc
+    echo "    password:$PYPIPASSWORD"                  >> ~/.pypirc
+    echo "[server-login]"                              >> ~/.pypirc
+    echo "    username:rjdkmr"                         >> ~/.pypirc
+    echo "    password:$PYPIPASSWORD"                  >> ~/.pypirc
+    
   - |
     pip install --upgrade twine
     export TWINE_USERNAME=rjdkmr
