@@ -1,6 +1,11 @@
 .. image:: https://travis-ci.org/rjdkmr/pyOBabel.svg?branch=master
     :target: https://travis-ci.org/rjdkmr/pyOBabel
 
+
+.. image:: https://readthedocs.org/projects/pyobabel/badge/?version=latest
+   :target: https://pyobabel.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 pyOBabel
 ========
 
